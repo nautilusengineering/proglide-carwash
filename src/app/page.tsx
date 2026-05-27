@@ -9,7 +9,7 @@ import {
   Mail,
   Clock,
   Shield,
-  Sparkles,
+  Award,
   Droplets,
   Check,
   ChevronRight,
@@ -17,6 +17,8 @@ import {
   Car,
   Menu,
   X,
+  Zap,
+  Ticket,
 } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -26,60 +28,65 @@ const washPackages = [
     name: "Basic Wash",
     type: "Soft Touch",
     tier: "Good",
+    tierLevel: 1,
     monthlyPrice: 20,
     singlePrice: 12,
-    features: ["Soft touch cleaning"],
+    features: ["Soft Touch"],
     color: "bg-[#3e65b3]",
     borderColor: "border-[#2a4a8a]",
-    shadowColor: "shadow-[8px_8px_0px_0px_#2a4a8a]",
+    shadowColor: "shadow-[4px_4px_0px_0px_#2a4a8a]",
+    dotColor: "bg-[#3e65b3] shadow-[2px_2px_0px_0px_#2a4a8a]",
+    headerTextColor: "text-white",
     popular: false,
-    scale: "",
+    featured: false,
   },
   {
     name: "Deluxe Wash",
     type: "Soft Touch",
     tier: "Better",
+    tierLevel: 2,
     monthlyPrice: 26,
     singlePrice: 16,
-    features: ["Ceramic x1", "Triple foam"],
+    features: ["Soft Touch", "Ceramic", "Triple Foam", "Tire Shine"],
     color: "bg-[#de4743]",
     borderColor: "border-[#b33936]",
-    shadowColor: "shadow-[10px_10px_0px_0px_#b33936]",
+    shadowColor: "shadow-[5px_5px_0px_0px_#b33936]",
+    dotColor: "bg-[#de4743] shadow-[2px_2px_0px_0px_#b33936]",
+    headerTextColor: "text-white",
     popular: true,
-    scale: "md:scale-105 z-10",
+    featured: false,
   },
   {
     name: "Ultimate Wash",
-    type: "Soft Touch",
+    type: "Soft Touch Pro",
     tier: "Best",
+    tierLevel: 3,
     monthlyPrice: 36,
     singlePrice: 20,
-    features: ["Ceramic x3", "Graphene", "Krazy Slick"],
+    features: ["Soft Touch Pro", "Ceramic x3", "Graphene", "Crazy Slick", "Tire Shine"],
     color: "bg-[#f3c402]",
-    textColor: "text-[#090f27]",
     borderColor: "border-[#d4a900]",
-    shadowColor: "shadow-[8px_8px_0px_0px_#d4a900]",
+    shadowColor: "shadow-[6px_6px_0px_0px_#d4a900]",
+    dotColor: "bg-[#f3c402] shadow-[2px_2px_0px_0px_#d4a900]",
+    headerTextColor: "text-[#090f27]",
     popular: false,
-    scale: "",
-  },
-];
-
-const multiVehiclePricing = [
-  {
-    name: "Ultimate Wash (Touch Free)",
-    prices: [36, 68, 101, 134, 167],
+    featured: false,
   },
   {
-    name: "Ultimate Wash (Soft Touch)",
-    prices: [36, 68, 101, 134, 167],
-  },
-  {
-    name: "Deluxe Wash (Soft Touch)",
-    prices: [26, 49, 73, 97, 121],
-  },
-  {
-    name: "Basic Wash (Soft Touch)",
-    prices: [20, 38, 56, 74, 92],
+    name: "Touch-Free Unlimited",
+    type: "Touch Free",
+    tier: "Premium",
+    tierLevel: 4,
+    monthlyPrice: 36,
+    singlePrice: 20,
+    features: ["Touch Free", "Ceramic x3", "Graphene", "Crazy Slick", "Tire Shine"],
+    color: "bg-[#090f27]",
+    borderColor: "border-[#090f27]",
+    shadowColor: "shadow-[8px_8px_0px_0px_#090f27]",
+    dotColor: "bg-[#f3c402] shadow-[2px_2px_0px_0px_#d4a900]",
+    headerTextColor: "text-white",
+    popular: false,
+    featured: true,
   },
 ];
 
@@ -95,7 +102,7 @@ const features = [
     iconColor: "text-white",
   },
   {
-    icon: Sparkles,
+    icon: Award,
     title: "Premium Quality",
     description:
       "State-of-the-art equipment and premium products ensure your vehicle gets the best treatment every single time.",
@@ -185,6 +192,38 @@ export default function Home() {
                 href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="hidden lg:inline-block relative w-[180px] h-[40px] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-transform"
+              >
+                <svg
+                  viewBox="0 0 262 60"
+                  preserveAspectRatio="none"
+                  className="absolute inset-0 w-full h-full"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                    fill="#090f27"
+                    transform="translate(4, 4)"
+                  />
+                  <path
+                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                    fill="#f3c402"
+                    stroke="#090f27"
+                    strokeWidth="2"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center gap-1.5 pl-2 pr-3 pointer-events-none">
+                  <Ticket className="w-4 h-4 text-[#de4743] flex-shrink-0" strokeWidth={2.5} />
+                  <p className="text-[#090f27] font-extrabold text-[11px] uppercase tracking-wider leading-tight whitespace-nowrap">
+                    First Wash Free
+                  </p>
+                </div>
+              </a>
+              <a
+                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <button className="bg-[#3e65b3] text-[#f3c402] font-bold px-6 py-3 rounded shadow-[4px_4px_0px_0px_#090f27] hover:shadow-[5px_5px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
                   Join Wash Club
@@ -211,6 +250,55 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#FDF9F3] shadow-lg border-t-2 border-[#090f27]">
             <div className="px-4 py-6 space-y-4">
+              <a
+                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block relative w-[262px] h-[60px] mx-auto"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <svg
+                  viewBox="0 0 262 60"
+                  width="262"
+                  height="60"
+                  className="absolute inset-0"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                    fill="#090f27"
+                    transform="translate(4, 4)"
+                  />
+                  <path
+                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                    fill="#f3c402"
+                    stroke="#090f27"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="50"
+                    y1="14"
+                    x2="50"
+                    y2="42"
+                    stroke="#090f27"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 3"
+                    opacity="0.4"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center pl-3 pr-5 pointer-events-none">
+                  <Ticket className="w-7 h-7 text-[#de4743] flex-shrink-0" strokeWidth={2.5} />
+                  <div className="flex-1 text-center leading-tight">
+                    <p className="text-[#090f27] font-extrabold text-sm uppercase tracking-wider leading-tight">
+                      First Wash Free
+                    </p>
+                    <p className="text-[#de4743] font-extrabold text-[10px] uppercase tracking-widest leading-tight">
+                      New Customers
+                    </p>
+                  </div>
+                </div>
+              </a>
               <a
                 href="#features"
                 className="block text-[#090f27] font-bold py-2"
@@ -390,66 +478,81 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Package Cards */}
-          <div className="grid md:grid-cols-3 gap-8 items-end">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
             {washPackages.map((pkg) => (
               <Card
                 key={pkg.name}
-                className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col ${pkg.scale} transition-transform`}
+                className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col`}
               >
-                {/* Most Popular Chip */}
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                    <span className="bg-[#090f27] text-[#f3c402] px-4 py-1.5 rounded-full font-bold text-sm shadow-[3px_3px_0px_0px_#b33936]">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-20 whitespace-nowrap">
+                    <span className="bg-[#de4743] text-white px-3 py-1 rounded-full font-extrabold text-[10px] shadow-[2px_2px_0px_0px_#090f27] uppercase tracking-wider">
                       Most Popular
                     </span>
                   </div>
                 )}
-                <div className={`${pkg.color} p-6 text-center border-b-3 ${pkg.borderColor} relative`}>
-                  {/* Tier Badge */}
-                  <span className={`absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-bold ${pkg.textColor ? "bg-[#090f27]/20 text-[#090f27]" : "bg-white/20 text-white"}`}>
-                    {pkg.tier}
-                  </span>
+                {pkg.featured && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-20 whitespace-nowrap">
+                    <span className="bg-[#f3c402] text-[#090f27] px-3 py-1 rounded-full font-extrabold text-[10px] shadow-[2px_2px_0px_0px_#de4743] inline-flex items-center gap-1 uppercase tracking-wider">
+                      <Zap className="w-3 h-3 fill-current" />
+                      Top Tier
+                    </span>
+                  </div>
+                )}
+
+                {/* Tier strip */}
+                <div className="bg-[#090f27] px-3 py-2 flex items-center justify-between border-b-3 border-[#090f27]">
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#f3c402]">
+                    Tier {pkg.tierLevel} · {pkg.tier}
+                  </p>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4].map((n) => (
+                      <span
+                        key={n}
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          n <= pkg.tierLevel ? "bg-[#f3c402]" : "bg-[#f3c402]/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Colored header */}
+                <div className={`${pkg.color} p-5 text-center border-b-3 ${pkg.borderColor}`}>
                   <p
-                    className={`text-sm font-medium mb-1 ${pkg.textColor || "text-white/90"}`}
+                    className={`text-xs font-medium mb-1 ${
+                      pkg.headerTextColor === "text-white"
+                        ? "text-white/90"
+                        : "text-[#090f27]/80"
+                    }`}
                   >
                     {pkg.type}
                   </p>
-                  <h3
-                    className={`text-2xl font-bold ${pkg.textColor || "text-white"}`}
-                  >
+                  <h3 className={`text-lg lg:text-xl font-bold ${pkg.headerTextColor}`}>
                     {pkg.name}
                   </h3>
                 </div>
 
-                <div className="p-6 bg-[#F5F0E8] flex flex-col flex-grow">
-                  <div className="text-center mb-5">
-                    <span className="text-4xl font-bold text-[#090f27]">
+                <div className="p-5 flex flex-col flex-grow">
+                  <div className="text-center mb-4">
+                    <span className="text-3xl font-bold text-[#090f27]">
                       ${pricingMode === "membership" ? pkg.monthlyPrice : pkg.singlePrice}
                     </span>
-                    <span className="text-gray-500 font-medium">
-                      {pricingMode === "membership" ? "/month" : ""}
+                    <span className="text-gray-500 font-medium text-sm">
+                      {pricingMode === "membership" ? "/mo" : ""}
                     </span>
                     {pricingMode === "membership" && (
-                      <p className="text-xs text-gray-400 mt-1">Unlimited washes</p>
+                      <p className="text-[10px] text-gray-400 mt-1">Unlimited washes</p>
                     )}
                   </div>
 
-                  <ul className="space-y-3 mb-6 flex-grow">
-                    {pkg.features.map((feature, idx) => (
+                  <ul className="space-y-2 mb-5 flex-grow">
+                    {pkg.features.map((feature) => (
                       <li
                         key={feature}
-                        className="flex items-center gap-3 text-gray-700"
+                        className="flex items-center gap-2 text-gray-700 text-sm"
                       >
-                        <span
-                          className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                            pkg.name === "Basic Wash"
-                              ? "bg-[#3e65b3] shadow-[2px_2px_0px_0px_#2a4a8a]"
-                              : pkg.name === "Deluxe Wash"
-                              ? "bg-[#de4743] shadow-[2px_2px_0px_0px_#b33936]"
-                              : "bg-[#f3c402] shadow-[2px_2px_0px_0px_#d4a900]"
-                          }`}
-                        />
+                        <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${pkg.dotColor}`} />
                         {feature}
                       </li>
                     ))}
@@ -462,77 +565,19 @@ export default function Home() {
                     className="mt-auto"
                   >
                     <button
-                      className="w-full py-3 font-bold rounded flex items-center justify-center gap-2 bg-[#3e65b3] text-[#f3c402] shadow-[4px_4px_0px_0px_#090f27] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
+                      className={`w-full py-2.5 font-bold rounded text-sm flex items-center justify-center gap-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] ${
+                        pkg.featured
+                          ? "bg-[#090f27] text-[#f3c402] shadow-[3px_3px_0px_0px_#de4743]"
+                          : "bg-[#3e65b3] text-[#f3c402] shadow-[3px_3px_0px_0px_#090f27]"
+                      }`}
                     >
-                      {pricingMode === "membership" ? "Subscribe Now" : "Buy Now"}
-                      <ChevronRight className="w-5 h-5" />
+                      {pricingMode === "membership" ? "Subscribe" : "Buy"}
+                      <ChevronRight className="w-4 h-4" />
                     </button>
                   </a>
                 </div>
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Multi-Vehicle Pricing */}
-      <section className="py-20 bg-[#FDF9F3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <div className="inline-block bg-[#de4743] text-white px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#090f27]">
-              Family Plans
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#090f27] mb-4">
-              Multi-Vehicle <span className="text-[#3e65b3]">Pricing</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Washes are shared between all the vehicles on the monthly plan.
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full bg-[#F5F0E8] rounded border-3 border-[#090f27] shadow-[6px_6px_0px_0px_#090f27] overflow-hidden">
-              <thead>
-                <tr className="bg-[#3e65b3] text-[#f3c402]">
-                  <th className="px-6 py-4 text-left font-bold">Package</th>
-                  <th className="px-6 py-4 text-center font-bold">1 Vehicle</th>
-                  <th className="px-6 py-4 text-center font-bold">2 Vehicles</th>
-                  <th className="px-6 py-4 text-center font-bold">3 Vehicles</th>
-                  <th className="px-6 py-4 text-center font-bold">4 Vehicles</th>
-                  <th className="px-6 py-4 text-center font-bold">5 Vehicles</th>
-                </tr>
-              </thead>
-              <tbody>
-                {multiVehiclePricing.map((row, index) => (
-                  <tr
-                    key={row.name}
-                    className={index % 2 === 0 ? "bg-[#F5F0E8]" : "bg-[#FDF9F3]"}
-                  >
-                    <td className="px-6 py-4 font-bold text-[#090f27]">
-                      {row.name}
-                    </td>
-                    {row.prices.map((price, i) => (
-                      <td
-                        key={`${row.name}-${price}-${i}`}
-                        className="px-6 py-4 text-center font-bold text-[#3e65b3]"
-                      >
-                        ${price}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-                <tr className="bg-[#f3c402]">
-                  <td className="px-6 py-4 font-bold text-[#090f27]">
-                    Monthly Washes
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-[#090f27]">30</td>
-                  <td className="px-6 py-4 text-center font-bold text-[#090f27]">60</td>
-                  <td className="px-6 py-4 text-center font-bold text-[#090f27]">90</td>
-                  <td className="px-6 py-4 text-center font-bold text-[#090f27]">120</td>
-                  <td className="px-6 py-4 text-center font-bold text-[#090f27]">150</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
@@ -663,7 +708,7 @@ export default function Home() {
             Ready for a <span className="text-[#f3c402]">Spotless Shine?</span>
           </h2>
           <p className="text-lg text-blue-100 mb-6">
-            Join our Wash Club today and enjoy unlimited washes every month.
+            Try us out — new customers get their <span className="text-[#f3c402] font-bold">first wash free</span>.
           </p>
           <a
             href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
@@ -671,7 +716,7 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             <button className="bg-[#f3c402] text-[#090f27] font-bold text-lg px-10 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-              Get Started for $20/month
+              Claim Your Free Wash
             </button>
           </a>
         </div>

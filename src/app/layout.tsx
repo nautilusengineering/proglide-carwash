@@ -43,7 +43,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${nunito.variable} ${fredoka.variable}`}>
-      <body className={`${nunito.className} antialiased`}>{children}</body>
+      <body className={`${nunito.className} antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
