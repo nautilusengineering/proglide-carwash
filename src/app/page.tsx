@@ -17,7 +17,6 @@ import {
   Car,
   Menu,
   X,
-  Zap,
   Ticket,
 } from "lucide-react";
 import Image from "next/image";
@@ -37,7 +36,6 @@ const washPackages = [
     shadowColor: "shadow-[4px_4px_0px_0px_#2a4a8a]",
     dotColor: "bg-[#3e65b3] shadow-[2px_2px_0px_0px_#2a4a8a]",
     headerTextColor: "text-white",
-    popular: false,
     featured: false,
   },
   {
@@ -47,13 +45,12 @@ const washPackages = [
     tierLevel: 2,
     monthlyPrice: 26,
     singlePrice: 16,
-    features: ["Soft Touch", "Ceramic", "Triple Foam", "Tire Shine"],
+    features: ["Soft Touch", "Ceramic", "Tire Shine"],
     color: "bg-[#de4743]",
     borderColor: "border-[#b33936]",
     shadowColor: "shadow-[5px_5px_0px_0px_#b33936]",
     dotColor: "bg-[#de4743] shadow-[2px_2px_0px_0px_#b33936]",
     headerTextColor: "text-white",
-    popular: true,
     featured: false,
   },
   {
@@ -62,14 +59,13 @@ const washPackages = [
     tier: "Best",
     tierLevel: 3,
     monthlyPrice: 36,
-    singlePrice: 20,
-    features: ["Soft Touch Pro", "Ceramic x3", "Graphene", "Crazy Slick", "Tire Shine"],
+    singlePrice: 25,
+    features: ["Soft Touch Pro", "Ceramic x3", "Graphene", "Tire Shine"],
     color: "bg-[#f3c402]",
     borderColor: "border-[#d4a900]",
     shadowColor: "shadow-[6px_6px_0px_0px_#d4a900]",
     dotColor: "bg-[#f3c402] shadow-[2px_2px_0px_0px_#d4a900]",
     headerTextColor: "text-[#090f27]",
-    popular: false,
     featured: false,
   },
   {
@@ -78,14 +74,13 @@ const washPackages = [
     tier: "Premium",
     tierLevel: 4,
     monthlyPrice: 36,
-    singlePrice: 20,
-    features: ["Touch Free", "Ceramic x3", "Graphene", "Crazy Slick", "Tire Shine"],
+    singlePrice: 25,
+    features: ["Touch Free", "Ceramic x3", "Graphene", "Tire Shine"],
     color: "bg-[#090f27]",
     borderColor: "border-[#090f27]",
     shadowColor: "shadow-[8px_8px_0px_0px_#090f27]",
     dotColor: "bg-[#f3c402] shadow-[2px_2px_0px_0px_#d4a900]",
     headerTextColor: "text-white",
-    popular: false,
     featured: true,
   },
 ];
@@ -93,9 +88,9 @@ const washPackages = [
 const features = [
   {
     icon: Shield,
-    title: "Safety First",
+    title: "Advanced Vehicle Protection",
     description:
-      "We don't use any products or machinery that may damage your car. Touch free washing has always been the safest way to wash.",
+      "Your vehicle deserves more than just a clean wash. Our state-of-the-art Touchless and Soft Touch systems are designed to deliver exceptional results while helping protect your vehicle's finish every step of the way.",
     borderColor: "border-[#3e65b3]",
     shadowColor: "shadow-[5px_5px_0px_0px_#3e65b3]",
     iconBg: "bg-[#3e65b3]",
@@ -122,6 +117,100 @@ const features = [
     iconColor: "text-white",
   },
 ];
+
+const softTouchPackages = washPackages.filter((pkg) => !pkg.featured);
+const touchFreePackage = washPackages.find((pkg) => pkg.featured)!;
+
+function PackageCard({
+  pkg,
+  pricingMode,
+}: {
+  pkg: (typeof washPackages)[number];
+  pricingMode: "membership" | "single";
+}) {
+  return (
+    <Card
+      className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col`}
+    >
+      {/* Tier strip */}
+      <div className="bg-[#090f27] px-3 py-2 flex items-center justify-between border-b-3 border-[#090f27]">
+        <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#f3c402]">
+          Tier {pkg.tierLevel} · {pkg.tier}
+        </p>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4].map((n) => (
+            <span
+              key={n}
+              className={`w-1.5 h-1.5 rounded-full ${
+                n <= pkg.tierLevel ? "bg-[#f3c402]" : "bg-[#f3c402]/20"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Colored header */}
+      <div className={`${pkg.color} p-5 text-center border-b-3 ${pkg.borderColor}`}>
+        <p
+          className={`text-xs font-medium mb-1 ${
+            pkg.headerTextColor === "text-white"
+              ? "text-white/90"
+              : "text-[#090f27]/80"
+          }`}
+        >
+          {pkg.type}
+        </p>
+        <h3 className={`text-lg lg:text-xl font-bold ${pkg.headerTextColor}`}>
+          {pkg.name}
+        </h3>
+      </div>
+
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="text-center mb-4">
+          <span className="text-3xl font-bold text-[#090f27]">
+            ${pricingMode === "membership" ? pkg.monthlyPrice : pkg.singlePrice}
+          </span>
+          {pricingMode === "membership" && (
+            <span className="text-lg font-bold text-[#090f27]"> /MONTH</span>
+          )}
+          {pricingMode === "membership" && (
+            <p className="text-[10px] text-gray-400 mt-1">Unlimited washes</p>
+          )}
+        </div>
+
+        <ul className="space-y-2 mb-5 flex-grow">
+          {pkg.features.map((feature) => (
+            <li
+              key={feature}
+              className="flex items-center gap-2 text-gray-700 text-sm"
+            >
+              <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${pkg.dotColor}`} />
+              {feature}
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto"
+        >
+          <button
+            className={`w-full py-2.5 font-bold rounded text-sm flex items-center justify-center gap-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] ${
+              pkg.featured
+                ? "bg-[#090f27] text-[#f3c402] shadow-[3px_3px_0px_0px_#de4743]"
+                : "bg-[#3e65b3] text-[#f3c402] shadow-[3px_3px_0px_0px_#090f27]"
+            }`}
+          >
+            {pricingMode === "membership" ? "Subscribe" : "Buy"}
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </a>
+      </div>
+    </Card>
+  );
+}
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -360,17 +449,14 @@ export default function Home() {
 
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              Unlimited{" "}
-              <span className="text-[#f3c402] glow-yellow">Shine</span>
-              <br />
-              <span className="text-[#de4743]">Zero</span>{" "}
-              Scratches
+              The Most Advanced Car Wash In{" "}
+              <span className="text-[#f3c402] glow-yellow">Hot Springs</span>
             </h1>
 
             {/* Subheadline - moved lower */}
             <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto pt-4">
-              Experience the safest, 100% touchless car wash technology designed to
-              leave your vehicle protected, gleaming, and ready for the road.
+              Choose Touchless or Soft Touch Technology for a Safer, Cleaner,
+              Better Wash—Trusted by Thousands of Local Drivers.
             </p>
 
             {/* CTA Buttons */}
@@ -406,12 +492,17 @@ export default function Home() {
             <div className="inline-block bg-[#3e65b3] text-[#f3c402] px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#090f27]">
               Why Choose Us
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#090f27] mb-4">
-              Touchless Car Washing
+            <h2 className="text-3xl md:text-4xl font-bold text-[#090f27] mb-3">
+              Why Drivers Choose{" "}
+              <span className="text-[#3e65b3]">ProGlide Express</span>
             </h2>
+            <p className="text-xl font-bold text-[#090f27] mb-4">
+              Two Wash Technologies. One Superior Clean.
+            </p>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The safest way to wash. Get a spotless clean without the risk of
-              scratches or damage.
+              Unlike most car washes, ProGlide Express lets you choose between
+              advanced Touchless and Soft Touch systems, giving you the perfect
+              combination of cleaning performance, protection, and convenience.
             </p>
           </div>
 
@@ -478,106 +569,30 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
-            {washPackages.map((pkg) => (
-              <Card
-                key={pkg.name}
-                className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col`}
-              >
-                {pkg.popular && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-20 whitespace-nowrap">
-                    <span className="bg-[#de4743] text-white px-3 py-1 rounded-full font-extrabold text-[10px] shadow-[2px_2px_0px_0px_#090f27] uppercase tracking-wider">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-                {pkg.featured && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-20 whitespace-nowrap">
-                    <span className="bg-[#f3c402] text-[#090f27] px-3 py-1 rounded-full font-extrabold text-[10px] shadow-[2px_2px_0px_0px_#de4743] inline-flex items-center gap-1 uppercase tracking-wider">
-                      <Zap className="w-3 h-3 fill-current" />
-                      Top Tier
-                    </span>
-                  </div>
-                )}
-
-                {/* Tier strip */}
-                <div className="bg-[#090f27] px-3 py-2 flex items-center justify-between border-b-3 border-[#090f27]">
-                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#f3c402]">
-                    Tier {pkg.tierLevel} · {pkg.tier}
-                  </p>
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4].map((n) => (
-                      <span
-                        key={n}
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          n <= pkg.tierLevel ? "bg-[#f3c402]" : "bg-[#f3c402]/20"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Colored header */}
-                <div className={`${pkg.color} p-5 text-center border-b-3 ${pkg.borderColor}`}>
-                  <p
-                    className={`text-xs font-medium mb-1 ${
-                      pkg.headerTextColor === "text-white"
-                        ? "text-white/90"
-                        : "text-[#090f27]/80"
-                    }`}
-                  >
-                    {pkg.type}
-                  </p>
-                  <h3 className={`text-lg lg:text-xl font-bold ${pkg.headerTextColor}`}>
-                    {pkg.name}
-                  </h3>
-                </div>
-
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="text-center mb-4">
-                    <span className="text-3xl font-bold text-[#090f27]">
-                      ${pricingMode === "membership" ? pkg.monthlyPrice : pkg.singlePrice}
-                    </span>
-                    <span className="text-gray-500 font-medium text-sm">
-                      {pricingMode === "membership" ? "/mo" : ""}
-                    </span>
-                    {pricingMode === "membership" && (
-                      <p className="text-[10px] text-gray-400 mt-1">Unlimited washes</p>
-                    )}
-                  </div>
-
-                  <ul className="space-y-2 mb-5 flex-grow">
-                    {pkg.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-2 text-gray-700 text-sm"
-                      >
-                        <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${pkg.dotColor}`} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto"
-                  >
-                    <button
-                      className={`w-full py-2.5 font-bold rounded text-sm flex items-center justify-center gap-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] ${
-                        pkg.featured
-                          ? "bg-[#090f27] text-[#f3c402] shadow-[3px_3px_0px_0px_#de4743]"
-                          : "bg-[#3e65b3] text-[#f3c402] shadow-[3px_3px_0px_0px_#090f27]"
-                      }`}
-                    >
-                      {pricingMode === "membership" ? "Subscribe" : "Buy"}
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </a>
-                </div>
-              </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch max-w-5xl mx-auto">
+            {softTouchPackages.map((pkg) => (
+              <PackageCard key={pkg.name} pkg={pkg} pricingMode={pricingMode} />
             ))}
+          </div>
+
+          {/* Touch-Free — its own section */}
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <div className="inline-block bg-[#090f27] text-[#f3c402] px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#de4743]">
+                Touch-Free
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#090f27] mb-3">
+                Prefer a 100%{" "}
+                <span className="text-[#3e65b3]">Touch-Free</span> Wash?
+              </h3>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                No brushes, no contact—just high-pressure water and premium
+                detergents for the safest possible clean.
+              </p>
+            </div>
+            <div className="max-w-sm mx-auto">
+              <PackageCard pkg={touchFreePackage} pricingMode={pricingMode} />
+            </div>
           </div>
         </div>
       </section>
@@ -668,8 +683,11 @@ export default function Home() {
                 <div>
                   <h3 className="text-lg font-bold text-[#090f27] mb-1">Hours</h3>
                   <p className="text-gray-600">
-                    Open 7 Days a Week<br />
-                    7:00 AM - 7:00 PM
+                    8am - 7pm Monday to Saturday<br />
+                    9am - 5pm Sunday
+                  </p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    * Winter Hours close at 6pm
                   </p>
                 </div>
               </div>
