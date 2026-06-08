@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import {
   MapPin,
   Phone,
   Mail,
@@ -16,7 +22,6 @@ import {
   Navigation,
   Car,
   Menu,
-  X,
   Ticket,
 } from "lucide-react";
 import Image from "next/image";
@@ -132,25 +137,8 @@ function PackageCard({
     <Card
       className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col`}
     >
-      {/* Tier strip */}
-      <div className="bg-[#090f27] px-3 py-2 flex items-center justify-between border-b-3 border-[#090f27]">
-        <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#f3c402]">
-          Tier {pkg.tierLevel} · {pkg.tier}
-        </p>
-        <div className="flex gap-1">
-          {[1, 2, 3, 4].map((n) => (
-            <span
-              key={n}
-              className={`w-1.5 h-1.5 rounded-full ${
-                n <= pkg.tierLevel ? "bg-[#f3c402]" : "bg-[#f3c402]/20"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
       {/* Colored header */}
-      <div className={`${pkg.color} p-5 text-center border-b-3 ${pkg.borderColor}`}>
+      <div className={`${pkg.color} p-5 text-center border-b-3 ${pkg.borderColor} rounded-t`}>
         <p
           className={`text-xs font-medium mb-1 ${
             pkg.headerTextColor === "text-white"
@@ -167,14 +155,31 @@ function PackageCard({
 
       <div className="p-5 flex flex-col flex-grow">
         <div className="text-center mb-4">
-          <span className="text-3xl font-bold text-[#090f27]">
-            ${pricingMode === "membership" ? pkg.monthlyPrice : pkg.singlePrice}
-          </span>
-          {pricingMode === "membership" && (
-            <span className="text-lg font-bold text-[#090f27]"> /MONTH</span>
-          )}
-          {pricingMode === "membership" && (
-            <p className="text-[10px] text-gray-400 mt-1">Unlimited washes</p>
+          {pricingMode === "membership" && !pkg.featured ? (
+            <>
+              <p className="text-sm font-bold text-gray-400 line-through">
+                ${pkg.monthlyPrice} /MONTH
+              </p>
+              <div className="mt-1 flex items-baseline justify-center gap-1.5">
+                <span className="text-3xl font-extrabold text-[#090f27]">$5</span>
+                <span className="text-sm font-bold text-[#090f27]">First Month</span>
+              </div>
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#de4743] mt-0.5">
+                Unlimited — New Members
+              </p>
+            </>
+          ) : (
+            <>
+              <span className="text-3xl font-bold text-[#090f27]">
+                ${pricingMode === "membership" ? pkg.monthlyPrice : pkg.singlePrice}
+              </span>
+              {pricingMode === "membership" && (
+                <span className="text-lg font-bold text-[#090f27]"> /MONTH</span>
+              )}
+              {pricingMode === "membership" && (
+                <p className="text-[10px] text-gray-400 mt-1">Unlimited washes</p>
+              )}
+            </>
           )}
         </div>
 
@@ -320,108 +325,112 @@ export default function Home() {
               </a>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              type="button"
-              className="md:hidden p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className={scrolled ? "text-[#090f27]" : "text-white"} size={28} />
-              ) : (
-                <Menu className={scrolled ? "text-[#090f27]" : "text-white"} size={28} />
-              )}
-            </button>
+            {/* Mobile Menu — drawer */}
+            <Drawer open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <DrawerTrigger asChild>
+                <button
+                  type="button"
+                  className="md:hidden p-2"
+                  aria-label="Open menu"
+                >
+                  <Menu
+                    className={scrolled ? "text-[#090f27]" : "text-white"}
+                    size={28}
+                  />
+                </button>
+              </DrawerTrigger>
+              <DrawerContent
+                aria-describedby={undefined}
+                className="bg-[#FDF9F3] border-t-3 border-[#090f27]"
+              >
+                <DrawerTitle className="sr-only">Menu</DrawerTitle>
+                <div className="px-4 pb-8 pt-2 space-y-4">
+                  <a
+                    href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block relative w-[262px] h-[60px] mx-auto"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <svg
+                      viewBox="0 0 262 60"
+                      width="262"
+                      height="60"
+                      className="absolute inset-0"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                        fill="#090f27"
+                        transform="translate(4, 4)"
+                      />
+                      <path
+                        d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
+                        fill="#f3c402"
+                        stroke="#090f27"
+                        strokeWidth="2"
+                      />
+                      <line
+                        x1="50"
+                        y1="14"
+                        x2="50"
+                        y2="42"
+                        stroke="#090f27"
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
+                        opacity="0.4"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center pl-3 pr-5 pointer-events-none">
+                      <Ticket className="w-7 h-7 text-[#de4743] flex-shrink-0" strokeWidth={2.5} />
+                      <div className="flex-1 text-center leading-tight">
+                        <p className="text-[#090f27] font-extrabold text-sm uppercase tracking-wider leading-tight">
+                          First Wash Free
+                        </p>
+                        <p className="text-[#de4743] font-extrabold text-[10px] uppercase tracking-widest leading-tight">
+                          New Customers
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="#features"
+                    className="block text-center text-[#090f27] font-bold py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Why Us
+                  </a>
+                  <a
+                    href="#packages"
+                    className="block text-center text-[#090f27] font-bold py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Packages
+                  </a>
+                  <a
+                    href="#location"
+                    className="block text-center text-[#090f27] font-bold py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Location
+                  </a>
+                  <a
+                    href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <button className="w-full bg-[#3e65b3] text-[#f3c402] font-bold py-3 rounded shadow-[4px_4px_0px_0px_#090f27]">
+                      Join Wash Club
+                    </button>
+                  </a>
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-[#FDF9F3] shadow-lg border-t-2 border-[#090f27]">
-            <div className="px-4 py-6 space-y-4">
-              <a
-                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block relative w-[262px] h-[60px] mx-auto"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <svg
-                  viewBox="0 0 262 60"
-                  width="262"
-                  height="60"
-                  className="absolute inset-0"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
-                    fill="#090f27"
-                    transform="translate(4, 4)"
-                  />
-                  <path
-                    d="M8 2 H250 A6 6 0 0 1 256 8 V20 A8 8 0 0 0 256 36 V48 A6 6 0 0 1 250 54 H8 A6 6 0 0 1 2 48 V36 A8 8 0 0 0 2 20 V8 A6 6 0 0 1 8 2 Z"
-                    fill="#f3c402"
-                    stroke="#090f27"
-                    strokeWidth="2"
-                  />
-                  <line
-                    x1="50"
-                    y1="14"
-                    x2="50"
-                    y2="42"
-                    stroke="#090f27"
-                    strokeWidth="1.5"
-                    strokeDasharray="3 3"
-                    opacity="0.4"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center pl-3 pr-5 pointer-events-none">
-                  <Ticket className="w-7 h-7 text-[#de4743] flex-shrink-0" strokeWidth={2.5} />
-                  <div className="flex-1 text-center leading-tight">
-                    <p className="text-[#090f27] font-extrabold text-sm uppercase tracking-wider leading-tight">
-                      First Wash Free
-                    </p>
-                    <p className="text-[#de4743] font-extrabold text-[10px] uppercase tracking-widest leading-tight">
-                      New Customers
-                    </p>
-                  </div>
-                </div>
-              </a>
-              <a
-                href="#features"
-                className="block text-[#090f27] font-bold py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Why Us
-              </a>
-              <a
-                href="#packages"
-                className="block text-[#090f27] font-bold py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Packages
-              </a>
-              <a
-                href="#location"
-                className="block text-[#090f27] font-bold py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Location
-              </a>
-              <a
-                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <button className="w-full bg-[#3e65b3] text-[#f3c402] font-bold py-3 rounded shadow-[4px_4px_0px_0px_#090f27]">
-                  Join Wash Club
-                </button>
-              </a>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Hero Section */}
@@ -467,7 +476,7 @@ export default function Home() {
                 rel="noopener noreferrer"
               >
                 <button className="bg-[#3e65b3] text-[#f3c402] font-bold text-lg px-8 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-                  Buy Membership
+                  First Wash Free
                 </button>
               </a>
               <a

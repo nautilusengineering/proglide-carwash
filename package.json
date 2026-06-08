@@ -20,7 +20,8 @@
     "react-grab": "latest",
     "same-runtime": "^0.0.1",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
