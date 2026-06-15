@@ -26,10 +26,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { usePaymentDrawerStore } from "@/stores/use-payment-drawer-store";
+import { PaymentDrawer } from "@/components/payment-drawer/payment-drawer";
 
 const washPackages = [
   {
     name: "Basic Wash",
+    billingTier: "basic" as const,
     type: "Soft Touch",
     tier: "Good",
     tierLevel: 1,
@@ -45,6 +48,7 @@ const washPackages = [
   },
   {
     name: "Deluxe Wash",
+    billingTier: "deluxe" as const,
     type: "Soft Touch",
     tier: "Better",
     tierLevel: 2,
@@ -60,6 +64,7 @@ const washPackages = [
   },
   {
     name: "Ultimate Wash",
+    billingTier: "ultimate" as const,
     type: "Soft Touch Pro",
     tier: "Best",
     tierLevel: 3,
@@ -75,6 +80,7 @@ const washPackages = [
   },
   {
     name: "Touch-Free Unlimited",
+    billingTier: "touch_free" as const,
     type: "Touch Free",
     tier: "Premium",
     tierLevel: 4,
@@ -133,6 +139,7 @@ function PackageCard({
   pkg: (typeof washPackages)[number];
   pricingMode: "membership" | "single";
 }) {
+  const openDrawer = usePaymentDrawerStore((s) => s.openDrawer);
   return (
     <Card
       className={`relative overflow-visible border-3 ${pkg.borderColor} ${pkg.shadowColor} package-card rounded bg-[#F5F0E8] flex flex-col`}
@@ -195,23 +202,18 @@ function PackageCard({
           ))}
         </ul>
 
-        <a
-          href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-auto"
+        <button
+          type="button"
+          onClick={() => openDrawer({ tier: pkg.billingTier, plan: pricingMode })}
+          className={`mt-auto w-full py-2.5 font-bold rounded text-sm flex items-center justify-center gap-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] ${
+            pkg.featured
+              ? "bg-[#090f27] text-[#f3c402] shadow-[3px_3px_0px_0px_#de4743]"
+              : "bg-[#3e65b3] text-[#f3c402] shadow-[3px_3px_0px_0px_#090f27]"
+          }`}
         >
-          <button
-            className={`w-full py-2.5 font-bold rounded text-sm flex items-center justify-center gap-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] ${
-              pkg.featured
-                ? "bg-[#090f27] text-[#f3c402] shadow-[3px_3px_0px_0px_#de4743]"
-                : "bg-[#3e65b3] text-[#f3c402] shadow-[3px_3px_0px_0px_#090f27]"
-            }`}
-          >
-            {pricingMode === "membership" ? "Subscribe" : "Buy"}
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </a>
+          {pricingMode === "membership" ? "Subscribe" : "Buy"}
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </Card>
   );
@@ -221,6 +223,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [pricingMode, setPricingMode] = useState<"membership" | "single">("membership");
+  const openDrawer = usePaymentDrawerStore((s) => s.openDrawer);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -314,15 +317,13 @@ export default function Home() {
                   </p>
                 </div>
               </a>
-              <a
-                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => openDrawer({ tier: "ultimate", plan: "membership" })}
+                className="bg-[#3e65b3] text-[#f3c402] font-bold px-6 py-3 rounded shadow-[4px_4px_0px_0px_#090f27] hover:shadow-[5px_5px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
               >
-                <button className="bg-[#3e65b3] text-[#f3c402] font-bold px-6 py-3 rounded shadow-[4px_4px_0px_0px_#090f27] hover:shadow-[5px_5px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-                  Join Wash Club
-                </button>
-              </a>
+                Join Wash Club
+              </button>
             </div>
 
             {/* Mobile Menu — drawer */}
@@ -415,17 +416,16 @@ export default function Home() {
                   >
                     Location
                   </a>
-                  <a
-                    href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                    onClick={() => setMobileMenuOpen(false)}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openDrawer({ tier: "ultimate", plan: "membership" });
+                    }}
+                    className="block w-full bg-[#3e65b3] text-[#f3c402] font-bold py-3 rounded shadow-[4px_4px_0px_0px_#090f27]"
                   >
-                    <button className="w-full bg-[#3e65b3] text-[#f3c402] font-bold py-3 rounded shadow-[4px_4px_0px_0px_#090f27]">
-                      Join Wash Club
-                    </button>
-                  </a>
+                    Join Wash Club
+                  </button>
                 </div>
               </DrawerContent>
             </Drawer>
@@ -876,6 +876,8 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <PaymentDrawer />
     </div>
   );
 }
