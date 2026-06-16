@@ -39,3 +39,16 @@ export function storefrontEmbedUrl(productId?: string): string {
   if (productId) params.set("productId", productId);
   return `${NAUTILUS_BASE_URL}/c/storefront/${ORG_SLUG}?${params.toString()}`;
 }
+
+// ProGlide "Free Wash Form" — a Nautilus contact form (name/phone/email) that
+// captures first-wash leads. Embedded in the free-wash drawer; styling/logo are
+// owned by the org's form_styling_config + hero_image_url in Nautilus.
+const FREE_WASH_FORM_ID = "5f6b0cf4-5c76-48bd-8bb6-007b9d528abe";
+
+/** Build the embedded "Free Wash" lead-capture form URL. */
+export function freeWashFormEmbedUrl(): string {
+  // No hideHeader: we want the form's hero logo (ProGlide wordmark) to show.
+  // White form body (bgColor=ffffff) to match the white drawer body.
+  const params = new URLSearchParams({ embedded: "true", bgColor: "ffffff" });
+  return `${NAUTILUS_BASE_URL}/c/form/${FREE_WASH_FORM_ID}?${params.toString()}`;
+}

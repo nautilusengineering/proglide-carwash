@@ -27,7 +27,9 @@ import {
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePaymentDrawerStore } from "@/stores/use-payment-drawer-store";
+import { useFreeWashDrawerStore } from "@/stores/use-free-wash-drawer-store";
 import { PaymentDrawer } from "@/components/payment-drawer/payment-drawer";
+import { FreeWashDrawer } from "@/components/free-wash-drawer";
 
 const washPackages = [
   {
@@ -224,6 +226,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [pricingMode, setPricingMode] = useState<"membership" | "single">("membership");
   const openDrawer = usePaymentDrawerStore((s) => s.openDrawer);
+  const openFreeWash = useFreeWashDrawerStore((s) => s.openDrawer);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -285,10 +288,9 @@ export default function Home() {
               >
                 Location
               </a>
-              <a
-                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={openFreeWash}
                 className="hidden lg:inline-block relative w-[180px] h-[40px] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-transform"
               >
                 <svg
@@ -316,7 +318,7 @@ export default function Home() {
                     First Wash Free
                   </p>
                 </div>
-              </a>
+              </button>
               <button
                 type="button"
                 onClick={() => openDrawer({ tier: "ultimate", plan: "membership" })}
@@ -346,12 +348,13 @@ export default function Home() {
               >
                 <DrawerTitle className="sr-only">Menu</DrawerTitle>
                 <div className="px-4 pb-8 pt-2 space-y-4">
-                  <a
-                    href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
                     className="block relative w-[262px] h-[60px] mx-auto"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openFreeWash();
+                    }}
                   >
                     <svg
                       viewBox="0 0 262 60"
@@ -394,7 +397,7 @@ export default function Home() {
                         </p>
                       </div>
                     </div>
-                  </a>
+                  </button>
                   <a
                     href="#features"
                     className="block text-center text-[#090f27] font-bold py-2"
@@ -470,15 +473,13 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
-              <a
-                href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={openFreeWash}
+                className="bg-[#3e65b3] text-[#f3c402] font-bold text-lg px-8 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
               >
-                <button className="bg-[#3e65b3] text-[#f3c402] font-bold text-lg px-8 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-                  First Wash Free
-                </button>
-              </a>
+                First Wash Free
+              </button>
               <a
                 href="https://maps.google.com/?q=1873+Higdon+Ferry+RD+Hot+Springs+AR+71913"
                 target="_blank"
@@ -490,50 +491,6 @@ export default function Home() {
                 </button>
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-[#FDF9F3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <div className="inline-block bg-[#3e65b3] text-[#f3c402] px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#090f27]">
-              Why Choose Us
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#090f27] mb-3">
-              Why Drivers Choose{" "}
-              <span className="text-[#3e65b3]">ProGlide Express</span>
-            </h2>
-            <p className="text-xl font-bold text-[#090f27] mb-4">
-              Two Wash Technologies. One Superior Clean.
-            </p>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Unlike most car washes, ProGlide Express lets you choose between
-              advanced Touchless and Soft Touch systems, giving you the perfect
-              combination of cleaning performance, protection, and convenience.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className={`p-8 border-3 ${feature.borderColor} bg-[#F5F0E8] ${feature.shadowColor} package-card rounded`}
-              >
-                <div
-                  className={`w-14 h-14 rounded flex items-center justify-center mb-5 ${feature.iconBg}`}
-                >
-                  <feature.icon className={`w-7 h-7 ${feature.iconColor}`} />
-                </div>
-                <h3 className="text-xl font-bold text-[#090f27] mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
@@ -602,6 +559,50 @@ export default function Home() {
             <div className="max-w-sm mx-auto">
               <PackageCard pkg={touchFreePackage} pricingMode={pricingMode} />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-[#FDF9F3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="inline-block bg-[#3e65b3] text-[#f3c402] px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#090f27]">
+              Why Choose Us
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#090f27] mb-3">
+              Why Drivers Choose{" "}
+              <span className="text-[#3e65b3]">ProGlide Express</span>
+            </h2>
+            <p className="text-xl font-bold text-[#090f27] mb-4">
+              Two Wash Technologies. One Superior Clean.
+            </p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Unlike most car washes, ProGlide Express lets you choose between
+              advanced Touchless and Soft Touch systems, giving you the perfect
+              combination of cleaning performance, protection, and convenience.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {features.map((feature) => (
+              <Card
+                key={feature.title}
+                className={`p-8 border-3 ${feature.borderColor} bg-[#F5F0E8] ${feature.shadowColor} package-card rounded`}
+              >
+                <div
+                  className={`w-14 h-14 rounded flex items-center justify-center mb-5 ${feature.iconBg}`}
+                >
+                  <feature.icon className={`w-7 h-7 ${feature.iconColor}`} />
+                </div>
+                <h3 className="text-xl font-bold text-[#090f27] mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {feature.description}
+                </p>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -737,15 +738,13 @@ export default function Home() {
           <p className="text-lg text-blue-100 mb-6">
             Try us out — new customers get their <span className="text-[#f3c402] font-bold">first wash free</span>.
           </p>
-          <a
-            href="https://mywashmembership.com/#/customer/1831a4e9-5c7f-4523-ab9e-374dad1af213/passes/pass-selection"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={openFreeWash}
+            className="bg-[#f3c402] text-[#090f27] font-bold text-lg px-10 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
           >
-            <button className="bg-[#f3c402] text-[#090f27] font-bold text-lg px-10 py-4 rounded shadow-[5px_5px_0px_0px_#090f27] hover:shadow-[6px_6px_0px_0px_#090f27] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-              Claim Your Free Wash
-            </button>
-          </a>
+            Claim Your Free Wash
+          </button>
         </div>
       </section>
 
@@ -878,6 +877,7 @@ export default function Home() {
       </footer>
 
       <PaymentDrawer />
+      <FreeWashDrawer />
     </div>
   );
 }
