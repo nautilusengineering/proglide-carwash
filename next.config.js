@@ -8,6 +8,11 @@ const nextConfig = {
         pathname: "/**",
       },
       {
+        protocol: "https",
+        hostname: "ucarecdn.com",
+        pathname: "/**",
+      },
+      {
         protocol: "http",
         hostname: "proglideexpresscarwash.com",
         pathname: "/**",

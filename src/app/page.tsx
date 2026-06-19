@@ -441,7 +441,7 @@ export default function Home() {
         {/* Background Image with blur */}
         <div className="absolute inset-0">
           <Image
-            src="http://proglideexpresscarwash.com/wp-content/uploads/2025/03/pro-glide-street-view-scaled.jpg"
+            src="https://ucarecdn.com/c0174ec3-2dda-4d53-a594-bf42ee72d5d5/"
             alt="ProGlide Express Car Wash Location"
             fill
             className="object-cover blur-[2px]"
@@ -626,7 +626,7 @@ export default function Home() {
             {/* Location Image */}
             <div className="relative rounded border-3 border-[#3e65b3] overflow-hidden shadow-[8px_8px_0px_0px_#3e65b3]">
               <Image
-                src="http://proglideexpresscarwash.com/wp-content/uploads/2025/03/pro-glide-street-view-scaled.jpg"
+                src="https://ucarecdn.com/c0174ec3-2dda-4d53-a594-bf42ee72d5d5/"
                 alt="ProGlide Express Car Wash Location"
                 width={700}
                 height={500}
