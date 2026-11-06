@@ -135,8 +135,10 @@ const features = [
   },
 ];
 
-const softTouchPackages = washPackages.filter((pkg) => !pkg.featured);
-const touchFreePackage = washPackages.find((pkg) => pkg.featured)!;
+// Featured member packs (Deluxe, Ultimate, Touch-Free). Basic Wash is sold as a
+// single wash only and sits in a low-key row below the member packs.
+const memberPackages = washPackages.filter((pkg) => !pkg.singleOnly);
+const singleOnlyPackages = washPackages.filter((pkg) => pkg.singleOnly);
 
 function PackageCard({ pkg }: { pkg: (typeof washPackages)[number] }) {
   const openDrawer = usePaymentDrawerStore((s) => s.openDrawer);
@@ -519,30 +521,36 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch max-w-5xl mx-auto">
-            {softTouchPackages.map((pkg) => (
+            {memberPackages.map((pkg) => (
               <PackageCard key={pkg.name} pkg={pkg} />
             ))}
           </div>
 
-          {/* Touch-Free — its own section */}
-          <div className="mt-16">
-            <div className="text-center mb-8">
-              <div className="inline-block bg-[#090f27] text-[#f3c402] px-4 py-1.5 text-sm font-bold rounded mb-4 shadow-[3px_3px_0px_0px_#de4743]">
-                Touch-Free
+          {/* Single-wash-only packages: deliberately low-key, below the member packs */}
+          {singleOnlyPackages.map((pkg) => (
+            <div key={pkg.name} className="mt-12 max-w-3xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded border-2 border-[#090f27]/15 bg-[#F5F0E8] px-5 py-4">
+                <div className="text-center sm:text-left">
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                    Just need one wash?
+                  </p>
+                  <p className="text-base font-bold text-[#090f27]">
+                    {pkg.name}{" "}
+                    <span className="font-medium text-gray-600">
+                      ({pkg.features.join(", ")}), single wash only
+                    </span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => openDrawer({ tier: pkg.billingTier, plan: "single" })}
+                  className="flex-shrink-0 rounded border-2 border-[#090f27] bg-white px-4 py-2 text-sm font-bold text-[#090f27] shadow-[2px_2px_0px_0px_#090f27] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
+                >
+                  ${pkg.singlePrice} Buy Single Wash
+                </button>
               </div>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#090f27] mb-3">
-                Prefer a 100%{" "}
-                <span className="text-[#3e65b3]">Touch-Free</span> Wash?
-              </h3>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                No brushes, no contact—just high-pressure water and premium
-                detergents for the safest possible clean.
-              </p>
             </div>
-            <div className="max-w-sm mx-auto">
-              <PackageCard pkg={touchFreePackage} />
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
