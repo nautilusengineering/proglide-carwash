@@ -17,7 +17,7 @@ const fredoka = Fredoka({
 export const metadata: Metadata = {
   title: "ProGlide Express Car Wash | Hot Springs, Arkansas",
   description:
-    "Premium touchless car wash in Hot Springs, Arkansas. Join our Wash Club for unlimited monthly washes starting at $20/month. Don't leave here dirty, we want you clean!",
+    "Premium touchless car wash in Hot Springs, Arkansas. Join our Wash Club for unlimited monthly washes starting at $26/month. Don't leave here dirty, we want you clean!",
   keywords: [
     "car wash",
     "Hot Springs",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ProGlide Express Car Wash | Hot Springs, Arkansas",
     description:
-      "Premium touchless car wash in Hot Springs, Arkansas. Join our Wash Club for unlimited monthly washes starting at $20/month.",
+      "Premium touchless car wash in Hot Springs, Arkansas. Join our Wash Club for unlimited monthly washes starting at $26/month.",
     type: "website",
     locale: "en_US",
   },

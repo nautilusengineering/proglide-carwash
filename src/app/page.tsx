@@ -40,6 +40,7 @@ const washPackages = [
     tierLevel: 1,
     monthlyPrice: 20,
     singlePrice: 12,
+    singleOnly: true,
     features: ["Soft Touch"],
     color: "bg-[#3e65b3]",
     borderColor: "border-[#2a4a8a]",
@@ -56,6 +57,7 @@ const washPackages = [
     tierLevel: 2,
     monthlyPrice: 26,
     singlePrice: 16,
+    singleOnly: false,
     features: ["Soft Touch", "Ceramic", "Tire Shine"],
     color: "bg-[#de4743]",
     borderColor: "border-[#b33936]",
@@ -72,6 +74,7 @@ const washPackages = [
     tierLevel: 3,
     monthlyPrice: 36,
     singlePrice: 25,
+    singleOnly: false,
     features: ["Soft Touch Pro", "Ceramic x3", "Graphene", "Tire Shine"],
     color: "bg-[#f3c402]",
     borderColor: "border-[#d4a900]",
@@ -88,6 +91,7 @@ const washPackages = [
     tierLevel: 4,
     monthlyPrice: 36,
     singlePrice: 25,
+    singleOnly: false,
     features: ["Touch Free", "Ceramic x3", "Graphene", "Tire Shine"],
     color: "bg-[#090f27]",
     borderColor: "border-[#090f27]",
@@ -157,18 +161,31 @@ function PackageCard({ pkg }: { pkg: (typeof washPackages)[number] }) {
       </div>
 
       <div className="p-5 flex flex-col flex-grow">
-        <div className="text-center mb-4">
-          <p className="text-sm font-bold text-gray-400 line-through">
-            ${pkg.monthlyPrice} /MONTH
-          </p>
-          <div className="mt-1 flex items-baseline justify-center gap-1.5">
-            <span className="text-3xl font-extrabold text-[#090f27]">${pkg.singlePrice}</span>
-            <span className="text-sm font-bold text-[#090f27]">First Month</span>
+        {pkg.singleOnly ? (
+          <div className="text-center mb-4">
+            <p className="text-sm font-bold uppercase text-gray-400">Single Wash</p>
+            <div className="mt-1 flex items-baseline justify-center gap-1.5">
+              <span className="text-3xl font-extrabold text-[#090f27]">${pkg.singlePrice}</span>
+              <span className="text-sm font-bold text-[#090f27]">Per Wash</span>
+            </div>
+            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#3e65b3] mt-0.5">
+              Single wash only
+            </p>
           </div>
-          <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#de4743] mt-0.5">
-            Unlimited for the price of one wash
-          </p>
-        </div>
+        ) : (
+          <div className="text-center mb-4">
+            <p className="text-sm font-bold text-gray-400 line-through">
+              ${pkg.monthlyPrice} /MONTH
+            </p>
+            <div className="mt-1 flex items-baseline justify-center gap-1.5">
+              <span className="text-3xl font-extrabold text-[#090f27]">${pkg.singlePrice}</span>
+              <span className="text-sm font-bold text-[#090f27]">First Month</span>
+            </div>
+            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#de4743] mt-0.5">
+              Unlimited for the price of one wash
+            </p>
+          </div>
+        )}
 
         <ul className="space-y-2 mb-5 flex-grow">
           {pkg.features.map((feature) => (
@@ -182,7 +199,9 @@ function PackageCard({ pkg }: { pkg: (typeof washPackages)[number] }) {
           ))}
         </ul>
 
-        <div className="mt-auto grid grid-cols-[2fr_3fr] gap-2.5">
+        <div
+          className={`mt-auto grid gap-2.5 ${pkg.singleOnly ? "grid-cols-1" : "grid-cols-[2fr_3fr]"}`}
+        >
           <button
             type="button"
             onClick={() => openDrawer({ tier: pkg.billingTier, plan: "single" })}
@@ -193,18 +212,20 @@ function PackageCard({ pkg }: { pkg: (typeof washPackages)[number] }) {
               Buy Single Wash
             </span>
           </button>
-          <button
-            type="button"
-            onClick={() => openDrawer({ tier: pkg.billingTier, plan: "membership" })}
-            className="flex flex-col items-center justify-center rounded border-2 border-[#090f27] bg-[#de4743] px-2 py-2.5 text-white shadow-[3px_3px_0px_0px_#090f27] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
-          >
-            <span className="text-lg font-extrabold uppercase leading-none whitespace-nowrap">
-              ${pkg.singlePrice} First Month
-            </span>
-            <span className="mt-1 text-[10px] font-bold uppercase tracking-wider leading-tight text-white/90">
-              ${pkg.monthlyPrice}/mo plan
-            </span>
-          </button>
+          {!pkg.singleOnly && (
+            <button
+              type="button"
+              onClick={() => openDrawer({ tier: pkg.billingTier, plan: "membership" })}
+              className="flex flex-col items-center justify-center rounded border-2 border-[#090f27] bg-[#de4743] px-2 py-2.5 text-white shadow-[3px_3px_0px_0px_#090f27] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
+            >
+              <span className="text-lg font-extrabold uppercase leading-none whitespace-nowrap">
+                ${pkg.singlePrice} First Month
+              </span>
+              <span className="mt-1 text-[10px] font-bold uppercase tracking-wider leading-tight text-white/90">
+                ${pkg.monthlyPrice}/mo plan
+              </span>
+            </button>
+          )}
         </div>
       </div>
     </Card>
