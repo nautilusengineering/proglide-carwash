@@ -526,28 +526,33 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Single-wash-only packages: deliberately low-key, below the member packs */}
+          {/* Single-wash-only packages: below the member packs, quieter than the cards */}
           {singleOnlyPackages.map((pkg) => (
-            <div key={pkg.name} className="mt-12 max-w-3xl mx-auto">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded border-2 border-[#090f27]/15 bg-[#F5F0E8] px-5 py-4">
+            <div key={pkg.name} className="mt-10 max-w-3xl mx-auto">
+              <div
+                className={`flex flex-col sm:flex-row items-center justify-between gap-4 rounded border-3 ${pkg.borderColor} ${pkg.shadowColor} bg-[#F5F0E8] px-6 py-5`}
+              >
                 <div className="text-center sm:text-left">
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <span
+                    className={`inline-block rounded ${pkg.color} px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${pkg.headerTextColor}`}
+                  >
                     Just need one wash?
-                  </p>
-                  <p className="text-base font-bold text-[#090f27]">
-                    {pkg.name}{" "}
-                    <span className="font-medium text-gray-600">
-                      ({pkg.features.join(", ")}), single wash only
-                    </span>
+                  </span>
+                  <p className="mt-2 text-xl font-bold text-[#090f27]">{pkg.name}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    {pkg.features.join(", ")}, single wash only
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => openDrawer({ tier: pkg.billingTier, plan: "single" })}
-                  className="flex-shrink-0 rounded border-2 border-[#090f27] bg-white px-4 py-2 text-sm font-bold text-[#090f27] shadow-[2px_2px_0px_0px_#090f27] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
-                >
-                  ${pkg.singlePrice} Buy Single Wash
-                </button>
+                <div className="flex items-center gap-4">
+                  <span className="text-3xl font-extrabold text-[#090f27]">${pkg.singlePrice}</span>
+                  <button
+                    type="button"
+                    onClick={() => openDrawer({ tier: pkg.billingTier, plan: "single" })}
+                    className="flex-shrink-0 rounded border-2 border-[#090f27] bg-[#3e65b3] px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-[3px_3px_0px_0px_#090f27] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
+                  >
+                    Buy Single Wash
+                  </button>
+                </div>
               </div>
             </div>
           ))}
